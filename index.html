@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Buscador de Gifs</title> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css"> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/js/materialize.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+</head>
+<body>
+  <nav class=" pink darken-4">
+    <div class="nav-wrapper">
+      <a href="#" class="brand-logo" style=" margin-left:8px"> Gifs searcher</a>     
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+        <li> <img src="PoweredBy_200_Horizontal_Light-Backgrounds_With_Logo.gif"  style=" margin-top:10px"></li>
+        <li><a href="http://www.edwinrm.com/">EdwinRM.com</a></li>        
+      </ul>
+    </div>
+  </nav>
+  <nav class="pink lighten-5">
+    <div class="nav-wrapper">
+      <form>
+        <div class="input-field">
+          <input id="search" autocomplete="off" class="search_button gif" type="search" required placeholder="Buscar Gifs">                                
+        </div>
+        <a class="waves-effect waves-light btn-small  pink darken-2" style=" margin-left:8px"  type="reset" id="reset" >Borrar</a> 
+      </form>
+    </div>
+  </nav>
+    
+  <div class="contenedor" style="margin-top: 50px; margin-left: 135px"></div>      
+  
+  <script type="text/javascript">    
+    $( document ).ready(function(){   
+      $('.search_button').keypress(function(e) {       
+        var enter = (event.keyCode ? event.keyCode : event.which);
+      if(enter == '13'){       
+        var palabra = $('.search_button').val().trim();   
+        $('.search_button').val("");
+        var imagenesurl = 'http://api.giphy.com/v1/gifs/search?q=' + palabra + '&api_key=hDDMZraFku98LnIRMh4qctKBFTKRBM6Q'; // api con nuestra llave
+
+        $.ajax({url: imagenesurl, method: 'GET'}).done(function(respuesta){ // por ajax y metodo get obtenemos las img
+          console.log(respuesta.data); 
+     
+          for(var i=0; i<respuesta.data.length;i++ ){    //iteramos sobre el arreglo 
+            var giphyURL = respuesta.data[i].images.fixed_height.url;  //obtenemos la url de la img            
+         $(".contenedor").append(" <img  class='gifs' height='200'  width='250' src='"+ giphyURL +"'>"); 
+          }
+        });
+      //boton reset
+        $('#reset').on('click', function(){
+          $('.gifs').remove();
+        })
+        return false;
+    }
+
+      })    
+    });
+
+  </script>
+
+<footer class="page-footer  pink darken-3" style="margin-top: 350px;">
+    <div class="container">
+      <div class="row">
+        <div class="col l6 s12">
+          <h5 class="white-text">Buscador de gifs animados</h5>
+          <p>Web creada con el Api de Giphy y Materialize</p>          
+        </div>        
+      </div>
+    </div>
+    <div class="footer-copyright  pink darken-4">
+      <div class="container">
+      © 2018 Copyright EdwinRM
+      <a class="grey-text text-lighten-4 right" href="https://developers.giphy.com/">Web app Powered by GIPHY</a>
+      </div>
+    </div>
+  </footer>      
+</body>
+</html>
